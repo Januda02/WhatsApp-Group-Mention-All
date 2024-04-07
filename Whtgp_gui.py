@@ -1,4 +1,5 @@
 import customtkinter
+import os
 
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("green")
@@ -25,19 +26,20 @@ def login():
 
     # Define the path to your Chrome profile directory
     #chrome_profile_path = "C:\\Users\\Phoenix\\appdata\\local\\Google\\Chrome\\User Data\\Default"
-    if entry1.get()!='':
-        user_name = entry1.get()
-        chrome_profile_path = r"C:\Users\{}\AppData\Local\Google\Chrome\User Data".format(user_name)
 
-        # Create ChromeOptions and set the user-data-dir to your Chrome profile
-        options = webdriver.ChromeOptions()
-        options.add_argument(f"user-data-dir={chrome_profile_path}")
+    #chrome_profile_path = r"C:\Users\{}\AppData\Local\Google\Chrome\User Data".format(user_name)
+    # Get the current user's home directory
+    home_directory = os.path.expanduser("~")
 
-        # Create a driver object with the specified options
-        driver = webdriver.Chrome(options=options)
-    else:
+    # Define the Chrome profile path using the current user's home directory
+    chrome_profile_path = os.path.join(home_directory, "AppData", "Local", "Google", "Chrome", "User Data")
+    # Create ChromeOptions and set the user-data-dir to your Chrome profile
+    options = webdriver.ChromeOptions()
+    options.add_argument(f"user-data-dir={chrome_profile_path}")
 
-        driver = webdriver.Chrome()
+    # Create a driver object with the specified options
+    driver = webdriver.Chrome(options=options)
+
 
     # Open WhatsApp Web
     driver.get("https://web.whatsapp.com/")
@@ -85,11 +87,6 @@ frame.pack(pady=10, padx=10, fill="both", expand=True)
 label = customtkinter.CTkLabel(master=frame, text="Let's mention all\n in your group", font=("Comic Sans MS", 30, "bold"), text_color='#2fa572')
 label.pack(pady=20, padx=10)
 
-label = customtkinter.CTkLabel(master=frame, text="Enter your PC user name(For log without QR)", font=("Arial", 12), text_color='white')
-label.pack(pady=0.01)
-
-entry1 = customtkinter.CTkEntry(master=frame, placeholder_text="Enter your PC user name", width=300)
-entry1.pack(pady=0, padx=10)
 
 entry2 = customtkinter.CTkEntry(master=frame, placeholder_text="Enter group name")
 entry2.pack(pady=30, padx=10)
