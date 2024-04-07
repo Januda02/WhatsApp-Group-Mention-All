@@ -1,4 +1,6 @@
 import time
+import os
+
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
@@ -6,8 +8,6 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 
-# Enter the user_name of your pc
-user_name = input("enter pc user name :")
 
 # Enter the name of the group you want to mention
 group_name = input("enter group name :")
@@ -16,18 +16,17 @@ group_name = input("enter group name :")
 msg_ = input("enter message :")
 
 # Define the path to your Chrome profile directory
-if user_name != '':
-    chrome_profile_path = r"C:\Users\{}\AppData\Local\Google\Chrome\User Data".format(user_name)
+# Get the current user's home directory
+home_directory = os.path.expanduser("~")
 
-    # Create ChromeOptions and set the user-data-dir to your Chrome profile
-    options = webdriver.ChromeOptions()
-    options.add_argument(f"user-data-dir={chrome_profile_path}")
+# Define the Chrome profile path using the current user's home directory
+chrome_profile_path = os.path.join(home_directory, "AppData", "Local", "Google", "Chrome", "User Data")
+# Create ChromeOptions and set the user-data-dir to your Chrome profile
+options = webdriver.ChromeOptions()
+options.add_argument(f"user-data-dir={chrome_profile_path}")
 
-    # Create a driver object with the specified options
-    driver = webdriver.Chrome(options=options)
-else:
-
-    driver = webdriver.Chrome()
+# Create a driver object with the specified options
+driver = webdriver.Chrome(options=options)
 
 # Open WhatsApp Web
 driver.get("https://web.whatsapp.com/")
